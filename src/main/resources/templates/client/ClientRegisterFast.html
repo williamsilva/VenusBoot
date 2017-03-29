@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:data="http://www.thymeleaf.org/extras/data"
+	  xmlns:alvorecer="http://alvorecer.com"
+	  xmlns:th="http://www.thymeleaf.org">
+	  
+<body>
+	<div class="modal fade" id="modalRegistrationFastClient" tabindex="-1" role="dialog"  th:fragment="modal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">Cadastro de Clientes</h4>
+				</div>
+				
+				<div class="modal-body">
+					
+					<div class="alert  alert-danger  hidden  js-mensage-cadastro-fast-client" role="alert"></div>
+				
+					<form class="form-vertical" th:object="${client}" th:action="@{/clients}">
+						<div class="row">	
+
+						<div class="form-group  col-sm-5">
+							<label for = "typeClient" class="control-label">Tipo pessoa</label> 
+							<div>
+								<div class="radio  radio-inline">
+									<input id="FISICA" class="js-radio-tipo-pessoa-fast" name="typeClient" 
+									data-documento="CPF" data-mascara="000.000.000-00" data-value="FISICA" type="radio" > 
+									<label class="control-label" for="FISICA">Física</label>
+								</div>
+								<div class="radio  radio-inline">
+									<input id="JURIDICA" class="js-radio-tipo-pessoa-fast" name="typeClient" 
+									data-documento="CNPJ" data-mascara="00.000.000/0000-00" data-value="JURIDICA" type="radio" > 
+									<label class="control-label" for="JURIDICA">Jurídica</label>
+								</div>
+							</div>
+						</div> 					
+							
+							<div class="col-sm-7 form-group client-requerid-cpf-cnpj" >
+								<label for="cpfCnpj" class="control-label">CPF-CNPJ</label>
+								<input id="cpfCnpj" type="text" class="form-control" placeholder="Informe o CPF ou CNPJ" disabled/>
+							</div>												
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-12 form-group client-requerid-name" >
+								<label for="contact" class="control-label">Nome</label>
+								<input id="name" type="text" class="form-control" placeholder="Informe o nome do Cliente"/>
+							</div>
+						</div>	
+						
+						<div class="row">
+							<div class="col-sm-12 form-group client-requerid-email">
+								<label for="contact" class="control-label">E-mail</label>
+								<input id="email" type="text" class="form-control" placeholder="Informe o E-mail"/>
+							</div>
+						</div>	
+						
+						<div class="row">
+							<div class="col-sm-6 form-group " >
+								<label for="contact" class="control-label">Telefone</label>
+								<input id="phoneNumber" type="text" class="form-control js-phone-number" placeholder="Informe um telefone"/>
+							</div>
+							
+							<div class="col-sm-6 form-group " >
+								<label for="contact" class="control-label">Celular</label>
+								<input id="celular" type="text" class="form-control js-phone-number" placeholder="Informe o Celular"/>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-4 form-group " >
+								<label for="contact" class="control-label">Cep</label>
+								<input id="codePostal" type="text" class="form-control js-code-postal" placeholder="Informe o Cep"/>
+							</div>
+							
+							<div class="col-sm-8 form-group " >
+								<label for="state" class="control-label">Estado</label>
+								<div class="alvorecer-field-action">
+									<select id="state" class="form-control" data:url ="@{/states}">	
+										<option value="">Selecione um Estado </option>
+									</select>									
+									<div class="alvorecer-field-action__icon js-img-loading-state" style="display: none">
+										<img th:src="@{/images/mini-loading.gif}">
+									</div>
+								</div>	
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-8 form-group client-requerid-city" >
+								<label for="contact" class="control-label">Cidade</label>
+								<div class="alvorecer-field-action">
+									<select id="city" class="form-control" data:url="@{/citys}">										
+									</select>									
+									<div class="alvorecer-field-action__icon js-img-loading-city" style="display: none">
+										<img th:src="@{/images/mini-loading.gif}">
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-sm-4 form-group " >
+								<label for="number" class="control-label">Número</label>
+								<input id="number" type="text" class="form-control " placeholder="Número da casa"/>
+							</div>
+							
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-12 form-group" >
+								<label for="neighborhood" class="control-label">Bairro</label>
+								<input id="neighborhood" type="text" class="form-control" placeholder="Informe o bairro"/>
+							</div>
+						</div>
+						
+						<div class="row">
+							<div class="col-sm-12 form-group " >
+								<label for="contact" class="control-label">Rua</label>
+								<input id="street" type="text" class="form-control" placeholder="Informe a rua"/>
+							</div>
+						</div>	
+						
+						<div class="row">
+							<div class="col-sm-12 form-group " >
+								<label for="contact" class="control-label">Complemento</label>
+								<input id="reference" type="text" class="form-control"/>
+							</div>
+						</div>	
+						
+					</form>
+					
+					<button type="button" class="btn btn-primary js-modal-client-fast-btn">Salvar</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
+
