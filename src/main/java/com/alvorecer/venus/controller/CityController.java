@@ -42,9 +42,6 @@ public class CityController {
 	@PostMapping("/new")
 	@CacheEvict(value = "citys" , key = "#city.state.id", condition = "#city.yesState()" )
 	public ModelAndView salvar(@Valid City city, BindingResult result, RedirectAttributes attributes) {
-
-
 		return new ModelAndView("redirect:/citys/new");
 	}
-
 }

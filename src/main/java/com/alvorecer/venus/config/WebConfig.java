@@ -32,20 +32,20 @@ import com.alvorecer.venus.thymeleaf.AlvorecerDialect;
 public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
+	public AlvorecerDialect brewerDialect() {
+		return new AlvorecerDialect();
+	}
+	
+	@Bean
 	public ViewResolver jasperReportsViewResolver(DataSource datasource) {
 		JasperReportsViewResolver resolver = new JasperReportsViewResolver();
-		resolver.setPrefix("classpath:/relatorios/");
+		resolver.setPrefix("classpath:/report/");
 		resolver.setSuffix(".jasper");
-		resolver.setViewNames("relatorio_*");
+		resolver.setViewNames("report_*");
 		resolver.setViewClass(JasperReportsMultiFormatView.class);
 		resolver.setJdbcDataSource(datasource);
 		resolver.setOrder(0);
 		return resolver;
-	}
-
-	@Bean
-	public AlvorecerDialect brewerDialect() {
-		return new AlvorecerDialect();
 	}
 
 	@Override
@@ -69,6 +69,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 		ReloadableResourceBundleMessageSource bundle = new ReloadableResourceBundleMessageSource();
 		bundle.setBasename("classpath:/messages");
 		bundle.setDefaultEncoding("UTF-8"); // http://www.utf8-chartable.de/
+				
 		return bundle;
 	}
 

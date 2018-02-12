@@ -6,14 +6,14 @@
 
 	<nav
 		class="navbar  navbar-fixed-top  navbar-default  js-sticky-reference"
-		id="main-navbar" th:fragment="navbar">
+			id="main-navbar" th:fragment="navbar">
 
 		<div class="container-fluid">
 
 			<div class="navbar-header">
 				<a class="navbar-brand  hidden-xs" th:href="@{/}"> <img
-					alt="Alvorecer" th:src="@{/images/logo.png}" />
-				</a>
+					alt="Alvorecer" th:src="@{/images/alvorecer/logo-gray.png}" />
+				</a> 
 
 				<ul class="nav  navbar-nav navbar-hight">
 					<li><a href="#" class="js-sidebar-toggle"><i
@@ -23,7 +23,11 @@
 			
 			<ul class="nav navbar-nav  navbar-right">
     			<li>
-    				<p class="navbar-text" th:text="${#authentication.principal.use.name}" >Usuário</p>
+    				 <p class="navbar-text" th:text="${#authentication.principal.use.name}" >Usuário</p>
+    				<!-- <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<img th:src="@{/images/thumbnail-user-null.jpg}" class="user-image" alt="User Image">
+							<span class="hidden-xs">Alvorecer Soluções</span>
+						</a> -->
     			</li>    
     			<li>
         			<a th:href="@{/logout}"><em class="fa  fa-sign-out"></em></a>

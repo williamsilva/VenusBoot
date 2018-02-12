@@ -12,42 +12,50 @@
 	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/vendors.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/algaworks.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/layout/stylesheets/application.css}"/>
+	
 	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/alvorecer.css}"/>
+	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/alvorecer.style.css}"/>
 	
 	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/vendors/bootstrap-switch.min.css}"/>
 	<link rel="stylesheet" type="text/css" th:href="@{/stylesheets/vendors/bootstrap-datepicker.standalone.min.css}"/>
 	
-	<link rel="shortcut icon" th:href="@{/images/favicon.png}"/>
+	<link rel="shortcut icon" th:href="@{/images/favicon-alvorecer.png}"/>
 
 </head>
 <body>
 		<input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
 		<input type="hidden" name="_csrf_header" th:value="${_csrf.headerName}"/>
 
-<div class="aw-layout-page">
-	
-	<div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
-	
-	<div th:replace="layout/fragments/MenuLateral :: layout-sidebar"></div>
-	
-	<section class="aw-layout-content  js-content" layout:fragment="conteudo"></section>
-	
-	<div th:replace="layout/fragments/Footer :: layout-footer"></div>
-</div>
+	<div class="aw-layout-page">
+		
+		<div th:replace="layout/fragments/BarraNavegacao :: navbar"></div>
+		
+		<div th:replace="layout/fragments/MenuLateral :: layout-sidebar"></div>
+		
+		<section class="aw-layout-content  js-content" layout:fragment="conteudo"></section>
+		
+		<div th:replace="layout/fragments/Footer :: layout-footer"></div>
+	</div>
 
 <script th:src="@{/layout/javascripts/vendors.min.js}"></script>
 <script th:src="@{/layout/javascripts/algaworks.min.js}"></script>
+
 <script th:src="@{/javascripts/vendors/bootstrap-datepicker.min.js}"></script>
 <script th:src="@{/javascripts/vendors/bootstrap-datepicker.pt-BR.min.js}"></script>
+
 <script th:src="@{/javascripts/vendors/jquery.mask.min.js}"></script>
-
-<script th:src="@{/javascripts/alvorecer.js}"></script>
-<script th:src="@{/javascripts/start-date.js}"></script>
-<script th:src="@{/javascripts/client-mask-cpf-cnpj.js}"></script>
-
 <script th:src="@{/javascripts/vendors/jquery.masknumber.min.js}"></script> 
+
+<script th:src="@{/javascripts/vendors/jquery.maskMoney.min.js}"></script> 
+
 <script th:src="@{/javascripts/vendors/numeral.min.js}"></script>
 <script th:src="@{/javascripts/vendors/pt-br.min.js}"></script>
+
+<script th:src="@{/javascripts/alvorecer.js}"></script>
+<script th:src="@{/javascripts/multiselecao.js}"></script>
+<script th:src="@{/javascripts/start-date.js}"></script>
+<script th:src="@{/javascripts/client-mask-cpf-cnpj.js}"></script>
+<script th:src="@{/javascripts/preencher-combo-city.js}"></script>
 
 
 <th:block layout:fragment="javascript-extra"></th:block>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:alvorecer="http://alvorecer.com"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
+	layout:decorator="~{layout/LayoutPadrao}">
+
+<head>
+	<title>Clientes</title>
+</head>
+
+<body>
+	<section layout:fragment = "conteudo">
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-10">
+						<h1>Lista de Clientes</h1>
+					</div>
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-default" th:href="@{/clients/new}"> 
+								<i class="glyphicon glyphicon-plus-sign"></i> 
+								<samp class="hidden-xs hidden-sm ">Novo Cliente</samp>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+			<form method="GET" th:object = "${clientFilter}">
+				<div class="row">
+					
+					<div class="form-group  col-sm-4">
+						<label class="control-label" for="name">Nome</label>
+						<input type="text" class="form-control" id="name" autofocus="autofocus" th:field="*{name}"/>
+					</div>
+								
+					<div class="form-group col-sm-3">
+						<label for="typeClient" class="control-label">Tipo pessoa</label> 
+						<div>
+							<th:block th:each="typeClient : ${type}">
+								<div class="radio  radio-inline">
+									<input type="radio" th:id="|id_${typeClient}|" class="js-radio-tipo-pessoa"
+										name="typeClient" data:documento="${typeClient.documento}" 
+										data:mascara="${typeClient.mascara}" th:field = "*{typeClient}"
+										th:value="${typeClient}"> 
+									<label class="control-label" th:for="|id_${typeClient}|" 
+									th:text="${typeClient.descricao}">Física</label>
+								</div>
+							</th:block>
+						</div>
+					</div>
+					
+					<div class="col-sm-3 form-group">
+						<label for="cpfOuCnpj" class="control-label">CPF-CNPJ</label>						
+						<div class="alvorecer-field-action">
+							<input id="cpfOuCnpj" type="text" class="form-control" 
+								th:field = "*{cpfOuCnpj}" disabled/>
+						</div>
+					</div>
+					
+				</div>
+				
+				<div class="row">
+					
+					<div class="form-group  col-sm-4">
+						<label class="control-label" for="email">E-mail</label>
+						<input type="text" class="form-control" id="email" th:field="*{email}"/>
+					</div>
+					
+					<div class="col-sm-3 form-group">
+						<label for="state" class="control-label">Estado</label>
+						<select id="state" class="form-control" th:field="*{state}">
+							<option value="">Selecione um Estado</option>
+							<option th:each="state : ${states}" th:value="${state.id}" th:text="${state.name}"></option>
+						</select>
+					</div>
+					
+					<div class="col-sm-3 form-group">
+						<label for="city" class="control-label">Cidade</label>
+						<div class="bw-field-action">
+							<input type="hidden" id="inputHiddenCitySelected" 
+								th:value="*{city}"/>
+							<select id="city" class="form-control" th:field="*{city}" data:url="@{/citys}">
+								<option value="">Selecione uma Cidade</option>
+							</select>
+							<div class="bw-field-action__icon js-img-loading-city" style="display: none">
+								<img th:src="@{/images/alvorecer/mini-loading.gif}">
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<button type="submit" class="btn  btn-primary">Pesquisar</button>
+			</form>
+			
+			<div class="table-responsive al-table-simples">
+				<table class="table  table-hover">
+					<thead>
+						<tr>
+							<th class="table-name">
+								<alvorecer:order page="${page}" field="name" text="Nome"/>
+							</th>
+							<th class="table-email">
+								<alvorecer:order page="${page}" field="email" text="E-mail"/>
+							</th>
+							<th class="table-cpf-cnpj">CPF/CNPJ</th>
+							<th class="table-cpf-cnpj">Cidade/UF</th>
+							<th class="table-acoes"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="clients : ${page.content}">
+							<td th:text="${clients.name}">Nome</td>
+							<td th:text="${clients.email}">E-mail</td>
+							<td th:text="${clients.cpfOuCnpj}">CPF/CNPJ</td>
+							<td th:text="${clients.cityState}">Cidade/UF</td>
+							<td class="text-center">
+								<a class="btn  btn-link  btn-xs js-tooltip" title="Editar" 
+									th:href="@{/clients/{id}(id=${clients.id})}"> 
+									<i class="glyphicon glyphicon-pencil"></i>
+								</a> 
+								<!-- <a class="btn  btn-link  btn-xs js-tooltip" title="Excluir"> 
+									<i class="glyphicon glyphicon-remove"></i>
+								</a> -->
+							</td>
+						</tr>
+						<tr th:if="${page.empty}">
+							<td class="text-center" colspan="7">Nenhum Registro Encontrado</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					<alvorecer:pagination page="${page}"/>
+				</div>
+			</div>
+		</div>		
+		
+	</section>
+</body>
+</html>

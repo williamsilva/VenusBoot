@@ -2,7 +2,6 @@ package com.alvorecer.venus.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,10 +16,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.NotBlank;
+
 import com.alvorecer.venus.model.enun.AsPark;
 import com.alvorecer.venus.model.enun.Channel;
 import com.alvorecer.venus.model.enun.Subject;
-import com.alvorecer.venus.model.enun.TypeClient;
+import com.alvorecer.venus.model.enun.TypeClientEnun;
 import com.alvorecer.venus.model.enun.YesNo;
 
 @Entity
@@ -34,7 +35,7 @@ public class Attendance implements Serializable {
 	private Long id;
 
 	@Column(name = "hour_register")
-	private LocalDateTime hourRegister;
+	private String hourRegister;
 
 	@Column(name = "date_register")
 	private LocalDate dateRegister;
@@ -80,12 +81,13 @@ public class Attendance implements Serializable {
 	private Client client;
 
 	@Transient
-	@NotNull(message = "Informe o tipo do cliente")
+	// @NotNull(message = "Informe o tipo do cliente")
 	@Enumerated(EnumType.STRING)
-	private TypeClient typeClient;
-
-	@Transient
-	private String cpfOuCnpj;
+	private TypeClientEnun typeClient;
+	
+	@NotBlank(message = "Protcolo é Obrigatório")
+	@Column(name = "protocol")
+	private String protocol;
 
 	public Attendance() {
 		// TODO Auto-generated constructor stub
@@ -99,11 +101,11 @@ public class Attendance implements Serializable {
 		this.id = id;
 	}
 
-	public LocalDateTime getHourRegister() {
+	public String getHourRegister() {
 		return hourRegister;
 	}
 
-	public void setHourRegister(LocalDateTime hourRegister) {
+	public void setHourRegister(String hourRegister) {
 		this.hourRegister = hourRegister;
 	}
 
@@ -187,20 +189,24 @@ public class Attendance implements Serializable {
 		this.client = client;
 	}
 
-	public TypeClient getTypeClient() {
+	public TypeClientEnun getTypeClient() {
 		return typeClient;
 	}
 
-	public void setTypeClient(TypeClient typeClient) {
+	public void setTypeClient(TypeClientEnun typeClient) {
 		this.typeClient = typeClient;
 	}
 
-	public String getCpfOuCnpj() {
-		return cpfOuCnpj;
+	public String getProtocol() {
+		return protocol;
 	}
 
-	public void setCpfOuCnpj(String cpfOuCnpj) {
-		this.cpfOuCnpj = cpfOuCnpj;
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
+	}
+
+	public boolean isNew() {
+		return this.id == null;
 	}
 
 	@Override
@@ -227,5 +233,4 @@ public class Attendance implements Serializable {
 			return false;
 		return true;
 	}
-	// 23:15
 }

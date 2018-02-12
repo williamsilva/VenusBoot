@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:alvorecer="http://alvorecer.com"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
+	layout:decorator="'layout/LayoutPadrao'">
+
+<head>
+	<title>Clientes</title>
+</head>
+
+<body>
+	<section layout:fragment="conteudo">
+
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-10">
+						<h1 th:if = "${client.new}">Cadastro de Clientes</h1>
+						<h1 th:unless = "${client.new}">Edição de Cliente - [[${client.name}]]</h1>
+					</div>
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-default" th:href="@{/clients}"> 
+								<i class="glyphicon glyphicon-plus-sign"></i> 
+								<samp class="hidden-xs hidden-sm ">Clientes</samp>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<form method="POST" class="form-vertical" th:object = "${client}" th:action = "@{/clients/new}">
+				
+				<alvorecer:message/>
+				
+				<input type="hidden" th:field="*{id}"/>
+				
+				<div class="row">
+									
+					<div class="col-sm-4 form-group bw-required" alvorecer:classforerror = "name">
+						<label for="name" class="control-label">Nome do Cliente</label>
+						<input id="name" type="text" class="form-control" th:field = "*{name}" 
+							autofocus="autofocus"/>
+					</div>
+				
+					<div class="form-group col-sm-2 bw-required" alvorecer:classforerror="typeClient">
+						<label for="typeClient" class="control-label">Tipo pessoa</label> 
+						<div>
+							<th:block th:each="typeClient : ${type}">
+								<div class="radio  radio-inline">
+									<input type="radio" th:id="|id_${typeClient}|" class="js-radio-tipo-pessoa"
+										name="typeClient" data:documento="${typeClient.documento}" 
+										data:mascara="${typeClient.mascara}" th:field = "*{typeClient}"
+										th:value="${typeClient}"> 
+									<label class="control-label" th:for="|id_${typeClient}|" 
+									th:text="${typeClient.descricao}">Física</label>
+								</div>
+							</th:block>
+						</div>
+					</div>
+					
+					<div class="col-sm-2 form-group bw-required" alvorecer:classforerror="cpfOuCnpj">
+						<label for="cpfOuCnpj" class="control-label">CPF-CNPJ</label>						
+						<div class="bw-field-action">
+							<input id="cpfOuCnpj" type="text" class="form-control" 
+								th:field = "*{cpfOuCnpj}" disabled/>
+						</div>
+					</div>
+					
+					<div class="form-group  col-sm-2">
+						<label for="dateNascimento" class="control-label">Data de nascimento</label>
+						<input type="text" class="form-control js-date" id="dateNascimento" 
+							th:field="*{dateNascimento}" autocomplete="off"/>
+					</div>
+				</div>
+				
+				<div class="row">				
+					
+					<div class="col-sm-4 form-group" alvorecer:classforerror="email">
+						<label for="email" class="control-label">E-mail</label>
+						<input id="email" type="text" class="form-control" th:field = "*{email}"/>
+					</div>
+					
+					<div class="col-sm-2 form-group" >
+						<label for="cellPhone" class="control-label">Celular</label> 
+						<input id="cellPhone" type="text" class="form-control js-phone-number" th:field="*{cellPhone}"/>
+					</div>
+					
+					<div class="col-sm-2 form-group" >
+						<label for="phoneNumber" class="control-label">Telefone</label> 
+						<input id="phoneNumber" type="text" class="form-control js-phone-number" th:field="*{phoneNumber}"/>
+					</div>
+					
+					<div class="col-sm-2 form-group" alvorecer:classforerror="codePostal">
+						<label for="codePostal">CEP</label> 
+						<div class="bw-field-action">
+							<input id="codPostal" type="text" th:field="*{codePostal}" class="form-control js-code-postal"/>
+							<div class="bw-field-action__icon attendece-js-img-new">
+								<a href="#" >
+									<i class="glyphicon  glyphicon-search  bw-glyphicon-large"></i>
+								</a>
+							</div>
+						</div>
+					</div>					
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-sm-6 form-group">
+						<label for="street" class="control-label">Rua</label>
+						<input id="street" type="text" class="form-control" th:field = "*{street}"/>
+					</div>
+					
+					<div class="col-sm-1 form-group">
+						<label for="number" class="control-label">Número</label>
+						<input id="number" type="number" class="form-control" th:field = "*{number}"
+							pattern="[0-9]+$"/>
+					</div>
+						
+					<div class="col-sm-3 form-group bw-required" alvorecer:classforerror="city.state.id">
+						<label for="state" class="control-label">Estado</label>
+						<select id="state" class="form-control" th:field="*{city.state}">
+							<option value="">Selecione um Estado</option>
+							<option th:each="state : ${states}" th:value="${state.id}" th:text="${state.name}"></option>
+						</select>
+					</div>
+					
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-3 form-group bw-required" alvorecer:classforerror="city.id">
+						<label for="city" class="control-label">Cidade</label>
+						<div class="bw-field-action">
+							<input type="hidden" id="inputHiddenCitySelected" 
+								th:value="*{city} != null ? *{city.id}"/>
+							<select id="city" class="form-control" th:field="*{city}" data:url="@{/citys}">
+								<option value="">Selecione uma Cidade</option>
+							</select>
+							<div class="bw-field-action__icon js-img-loading-city" style="display: none">
+								<img th:src="@{/images/mini-loading.gif}">
+							</div>
+						</div>
+					</div>
+					
+					<div class="col-sm-3 form-group">
+						<label for="neighborhood" class="control-label">Bairro</label>
+						<input id="neighborhood" type="text" class="form-control" th:field = "*{neighborhood}"/>
+					</div>
+					
+					<div class="col-sm-4 form-group">
+						<label for="reference" class="control-label">Referência</label>
+						<input id="reference" type="text" class="form-control" th:field = "*{reference}"/>
+					</div>
+					
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-10 form-group">
+						<label for="comments" class="control-label">Observações</label>
+						<textarea id="comments" rows="6" maxlength="500" class="form-control" th:field="*{comments}"></textarea>
+					</div>					
+				</div>
+				
+				<button type="submit" class="btn  btn-primary">Salvar</button>
+			</form>	
+		
+		</div>
+	</section>
+
+</body>
+</html>

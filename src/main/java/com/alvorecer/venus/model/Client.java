@@ -1,6 +1,7 @@
 package com.alvorecer.venus.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -18,11 +19,18 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.br.CNPJ;
+import org.hibernate.validator.constraints.br.CPF;
+import org.hibernate.validator.group.GroupSequenceProvider;
 
-import com.alvorecer.venus.model.enun.TypeClient;
+import com.alvorecer.venus.model.enun.TypeClientEnun;
+import com.alvorecer.venus.model.validation.ClientSequenciProvider;
+import com.alvorecer.venus.model.validation.CnpjGroup;
+import com.alvorecer.venus.model.validation.CpfGroup;
 
 @Entity
 @Table(name = "client")
+@GroupSequenceProvider(ClientSequenciProvider.class)
 public class Client implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,24 +45,31 @@ public class Client implements Serializable {
 	@NotNull(message = "Tipo pessoa é obrigatório")
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type_client")
-	private TypeClient typeClient;
+	private TypeClientEnun typeClient;
 
 	@NotBlank(message = "CPF/CNPJ é obrigatório")
+	@CNPJ(groups = CnpjGroup.class)
+	@CPF(groups = CpfGroup.class)
 	@Column(name = "cpf_cnpj")
 	private String cpfOuCnpj;
 
 	@Column(name = "phone_number")
 	private String phoneNumber;
 
-	@Column(name = "celular")
-	private String celular;
+	@Column(name = "cell_phone")
+	private String cellPhone;
 
 	@Email(message = "E-mail informado inválido")
 	private String email;
 
+	@Column(name = "date_nascimento")
+	private LocalDate dateNascimento;
+
 	private int number;
 
 	private String reference;
+
+	private String comments;
 
 	private String street;
 
@@ -63,12 +78,16 @@ public class Client implements Serializable {
 	@Column(name = "code_postal")
 	private String codePostal;
 
+	@NotNull(message = "Informe uma Cidade")
 	@ManyToOne()
 	@JoinColumn(name = "id_city")
 	private City city;
 
 	@OneToMany(mappedBy = "client")
 	private List<Attendance> attendance;
+	
+	@OneToMany(mappedBy = "client")
+	private List<Reserve> reserve;
 
 	public Long getId() {
 		return id;
@@ -86,11 +105,11 @@ public class Client implements Serializable {
 		this.name = name;
 	}
 
-	public TypeClient getTypeClient() {
+	public TypeClientEnun getTypeClient() {
 		return typeClient;
 	}
 
-	public void setTypeClient(TypeClient typeClient) {
+	public void setTypeClient(TypeClientEnun typeClient) {
 		this.typeClient = typeClient;
 	}
 
@@ -110,12 +129,12 @@ public class Client implements Serializable {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getCelular() {
-		return celular;
+	public String getCellPhone() {
+		return cellPhone;
 	}
 
-	public void setCelular(String celular) {
-		this.celular = celular;
+	public void setCellPhone(String cellPhone) {
+		this.cellPhone = cellPhone;
 	}
 
 	public String getEmail() {
@@ -174,6 +193,37 @@ public class Client implements Serializable {
 		this.city = city;
 	}
 
+	public LocalDate getDateNascimento() {
+		return dateNascimento;
+	}
+
+	public void setDateNascimento(LocalDate dateNascimento) {
+		this.dateNascimento = dateNascimento;
+	}
+
+	public String getComments() {
+		return comments;
+	}
+
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	public boolean isNew() {
+		return this.id == null;
+	}
+
+	public boolean isCityNull() {
+		return this.city == null;
+	}
+
+	public String getCityState() {
+		if (this.city != null) {
+			return this.city.getName() + "/" + this.city.getState().getInitials();
+		}
+		return null;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -201,6 +251,6 @@ public class Client implements Serializable {
 
 	@Override
 	public String toString() {
-		return String.valueOf(this.id);
+		return String.valueOf(this.name);
 	}
 }

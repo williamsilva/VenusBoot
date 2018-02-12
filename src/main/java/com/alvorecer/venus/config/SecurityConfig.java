@@ -3,6 +3,7 @@ package com.alvorecer.venus.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +20,7 @@ import com.alvorecer.venus.security.AppUserDetailsService;
 @EnableWebSecurity
 @ComponentScan(basePackageClasses = AppUserDetailsService.class)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
@@ -46,6 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.antMatchers("/clients/new").hasAnyRole("REGISTER_CLIENT","ALVORECER_MASTER")
 					.antMatchers("/users").hasAnyRole("LIST_USERS","ALVORECER_MASTER")
 					.antMatchers("/users/new").hasAnyRole("REGISTER_USERS","ALVORECER_MASTER")
+					.antMatchers("/reservations").hasAnyRole("LIST_RESERVE","ALVORECER_MASTER")
+					.antMatchers("/reservations/new").hasAnyRole("REGISTER_RESERVE","ALVORECER_MASTER")
+					.antMatchers("/products/new").hasAnyRole("REGISTER_PRODUCTS","ALVORECER_MASTER")
+					.antMatchers("/products").hasAnyRole("LIST_PRODUCTS","ALVORECER_MASTER")
 					.anyRequest().authenticated()
 					.and()
 				.formLogin()
@@ -54,9 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					.and()
 				.logout()
 					.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-					.and()
-				.exceptionHandling()
-					.accessDeniedPage("/403")
 					.and()
 				.sessionManagement()
 					.maximumSessions(2)

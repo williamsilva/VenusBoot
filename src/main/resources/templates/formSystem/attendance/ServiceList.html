@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:alvorecer="http://alvorecer.com"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
+	layout:decorator="~{layout/LayoutPadrao}">
+
+<head>
+	<title>Atendimentos</title>
+</head>
+
+<body>
+	<section layout:fragment="conteudo">
+
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-10">
+						<h1>Registros de Atendimentos</h1>
+					</div>
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-default" th:href="@{/attendances/new}"> 
+								<i class="glyphicon glyphicon-plus-sign"></i> 
+								<samp class="hidden-xs hidden-sm ">Novo Registro</samp>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<form method="GET" th:object = "${attendanceFilter}">
+				<div class="row">
+				
+					<div class="col-sm-2 form-group" >
+						<label for="dateRegisterInicial" class="control-label">Data Inicial</label>						
+						<input type="text" class="form-control js-date" id="dateRegisterInicial" 
+							th:field = "*{dateRegisterInicial}" autocomplete="off"/>				 		
+					</div>
+					
+					<div class="col-sm-2 form-group" >
+						<label for="dateRegisterFinal" class="control-label">Data Final</label>						
+						<input type="text" class="form-control js-date" id="dateRegisterFinall" 
+							th:field = "*{dateRegisterFinal}" autocomplete="off"/>				 		
+					</div>
+					
+					<div class="col-sm-2 form-group">
+						<label for="channel" class="control-label">Canal Contato</label>
+							<select class="form-control" id="channel"  th:field = "*{channel}" >
+								<option value=""></option>
+								<option th:each="channel : ${channels}" th:text="${channel.descricao}"
+									th:value="${channel}"></option>
+							</select>
+					</div>
+					<div class="form-group  col-sm-2">
+						<label for="typeClient" class="control-label">Tipo pessoa</label> 
+						<div>
+							<th:block th:each="typeClient : ${type}">
+								<div class="radio  radio-inline">
+									<input type="radio" th:id="|id_${typeClient}|" class="js-radio-tipo-pessoa"
+										name="typeClient" data:documento="${typeClient.documento}" 
+										data:mascara="${typeClient.mascara}" th:field = "*{typeClient}"
+										th:value="${typeClient}"> 
+									<label class="control-label" th:for="|id_${typeClient}|" 
+									th:text="${typeClient.descricao}">Física</label>
+								</div>
+							</th:block>
+						</div>
+					</div>
+					
+					<div class="col-sm-2 form-group" >
+						<label for="protocol" class="control-label">Protocolo</label>
+						<input id="protocol" type="text" class="form-control" th:field = "*{protocol}"/>
+					</div>
+					
+				</div>
+				
+				<div class="row">
+					<div class="col-sm-2 form-group">
+						<label for="cpfOuCnpj" class="control-label">CPF-CNPJ</label>						
+						<div class="alvorecer-field-action">
+							<input id="cpfOuCnpj" type="text" class="form-control" 
+								th:field = "*{cpfOuCnpj}" disabled/>
+						</div>
+					</div>
+					
+					<div class="col-sm-4 form-group" >
+						<label for="clientName" class="control-label">Nome Cliente</label>
+						<input id="clientName" type="text" class="form-control" th:field = "*{nomeCliente}"/>
+					</div>
+					
+					<div class="col-sm-2 form-group">
+						<label for="asPark" class="control-label">Como soube do parque</label>						 
+						 <select id="asPark" class="form-control" th:field = "*{asPark}">						 
+   							 <option value="">Selecione</option>   							 
+    						 <option th:each="asPark : ${asParks}" th:value="${asPark}" 
+    						 th:text="${asPark.descricao}">Jornal</option>    						 
+  						</select>
+					</div>
+					<div class="col-sm-2 form-group">
+						<label for="subject" class="control-label">Assunto</label>
+						<select class="form-control"  id="subject" th:field = "*{subject}">
+   							 <option value="">Selecione</option>
+    						 <option th:each="subject : ${subjects}" th:value="${subject}"
+    						  th:text="${subject.descricao}">Não</option>
+  						</select>
+					</div>
+
+				</div>
+				
+				<div class="row">
+					
+					<div class="col-sm-4 form-group" >
+						<label for="clienteEmail" class="control-label">E-mail</label>
+						<input id="clienteEmail" type="text" class="form-control" th:field = "*{email}"/>
+					</div>
+						
+					<div class="col-sm-2 form-group">
+						<label for="knowsPark" class="control-label">Conhece o Parque</label>
+						<select class="form-control" id="knowsPark" th:field = "*{knowsPark}">
+   							 <option value=""></option>
+    						 <option th:each="knowsPark : ${close}" th:text="${knowsPark.descricao}" 
+    						 th:value="${knowsPark}">Não</option>
+  						</select>
+					</div>	
+					
+					<div class="col-sm-2 form-group">
+						<label for="closed" class="control-label">Fechou</label>
+						<select class="form-control" id="closed"  th:field = "*{closed}">
+							 <option value=""></option>
+   							 <option th:each="closed : ${close} " th:value="${closed}" 
+   							 th:text="${closed.descricao}">Sim</option>    						 
+  						</select>
+					</div>		
+					
+					<div class="col-sm-2 form-group">
+						<label for="returnContact" class="control-label">Retonou Contato</label>
+						<select class="form-control" id="returnContact" th:field = "*{returnContact}">
+   							 <option value=""></option>
+    						 <option th:each="returnContact : ${close}" th:value="${returnContact}" 
+    						 th:text="${returnContact.descricao}">Não</option>
+  						</select>
+					</div>
+				</div>
+				<button type="submit" class="btn  btn-primary">Pesquisar</button>
+			</form>	
+			
+			<div class="table-responsive al-table-simples">
+				<table class="table  table-hover">
+					<thead>
+						<tr>
+							<th class="table-name">
+								<alvorecer:order page="${page}" field="closed" text="Cliente"/>
+							</th>							
+							<th class="table-email">E-mail</th>
+							<th class="table-cpf-cnpj">
+								<alvorecer:order page="${page}" field="closed" text="CPF/CNPJ"/>
+							</th>
+							<th class="table-attendance-protocol">Protocolo</th>
+							<th class="table-attendance-date-regist">Data Registro</th>
+							<th class="table-acoes"></th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr th:each = "attendance : ${page.content}">
+							<td class="text-hight" th:text = "${attendance.client.name}">Nome</td>
+							<td class="text-hight" th:text = "${attendance.client.email}">E-mail</td>
+							<td class="text-hight" th:text = "${attendance.client.cpfOuCnpj}">cpf/cnpj</td>
+							<td class="text-hight" th:text = "${attendance.protocol}">Protocolo</td>
+							<td class="text-hight" th:text = "${{attendance.dateRegister}}">Data Registro</td>	
+							<td class="text-center">
+							<a class="btn  btn-link  btn-xs" title="Editar"
+								th:href="@{/attendances/{id}(id=${attendance.id})}"> 
+								<i class="glyphicon glyphicon-pencil"></i>
+							</a>
+							<a class="btn  btn-link  btn-xs" title="Excluir">
+								<i class="glyphicon glyphicon-remove"></i>
+							</a>
+							</td>				
+						</tr>
+						
+						<tr th:if="${page.empty}">
+							<td class="text-center" colspan="7">Nenhum Registro Encontrado</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>	
+				<alvorecer:pagination page="${page}"/>		
+		</div>
+	</section>
+
+</body>
+</html>

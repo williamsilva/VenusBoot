@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:alvorecer="http://alvorecer.com"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
+	layout:decorator="~{layout/LayoutPadrao}">
+
+<head>
+	<title>Produtos</title>
+</head>
+
+<body>
+	<section layout:fragment = "conteudo">
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-10">
+						<h1 th:if = "${product.new}">Cadastro de Produtos</h1>
+						<h1 th:unless = "${product.new}">Edição do Produto - [[${product.name}]]</h1>
+					</div>
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-default" th:href="@{/products}"> 
+								<i class="glyphicon glyphicon-plus-sign"></i> 
+								<samp class="hidden-xs hidden-sm ">Produtos</samp>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+			<form method="POST" class="form-vertical" th:object = "${product}" th:action = "@{/products/new}">
+				
+				<alvorecer:message/>
+				
+				<input type="hidden" th:field="*{id}"/>
+				
+				<div class="row">
+					
+					<div class="col-sm-6 form-group bw-required" alvorecer:classforerror = "name">
+						<label for="name" class="control-label">Produto</label>
+						<input id="name" type="text" class="form-control" th:field = "*{name}" 
+							autofocus="autofocus"/>
+					</div>
+					
+					<div class="col-sm-5 form-group bw-required" alvorecer:classforerror = "description">
+						<label for="name" class="control-label">Descrição</label>
+						<input id="name" type="text" class="form-control" th:field = "*{description}" 
+							autofocus="autofocus"/>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="form-group  col-sm-6">
+						<label for="Inicial">Validade</label>
+						<div class="form-inline">
+							<input type="text" class="form-control  aw-form-control-inline-sm  js-date" id="Inicial" 
+								 autocomplete="off" th:field="*{validInicial}"/>
+							<label for="final" class="aw-form-label-between">Até</label>
+							<input type="text" class="form-control  aw-form-control-inline-sm  js-date" id="final" 
+								 autocomplete="off" th:field="*{validFinal}"/>
+						</div>
+					</div>
+					
+					<div class="form-group  col-sm-2 bw-required" alvorecer:classforerror = "value">
+						<label class="control-label" for="valorAntecipado">Valor</label>
+						<div class="input-group">
+				      		<div class="input-group-addon">R$</div> 
+							<input type="text" maxlength="14" class="form-control  js-decimal" 
+								id="valorAntecipado" th:field="*{value}"/>
+						</div>
+					</div>
+					
+					<div class="form-group  col-sm-2" alvorecer:classforerror = "status">
+						<label class="control-label">Status</label>
+						<div>
+							<input type="checkbox" class="js-status" data-size="small" data-off-color="danger" 
+								data-on-text="Ativo" data-off-text="Inativo" th:field="*{status}"/>
+						</div>
+					</div>
+				</div>
+				
+				<button type="submit" class="btn  btn-primary">Salvar</button>
+				
+			</form>
+				
+		</div>		
+		
+	</section>
+	
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/vendors/bootstrap-switch.min.js}"></script>
+		<script>
+			$('.js-status').bootstrapSwitch();
+		</script>
+	</th:block>
+</body>
+</html>

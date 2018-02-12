@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:alvorecer="http://alvorecer.com"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
+	layout:decorator="~{layout/LayoutPadrao}">
+
+<head>
+	<title>Produtos</title>
+</head>
+
+<body>
+	<section layout:fragment = "conteudo">
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-10">
+						<h1>Lista de Produtos</h1>
+					</div>
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-default" th:href="@{/products/new}"> 
+								<i class="glyphicon glyphicon-plus-sign"></i> 
+								<samp class="hidden-xs hidden-sm ">Novo Produto</samp>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="container-fluid">
+			<form method="GET" th:object = "${productFilter}" class = "form-vertical">
+				<div class="row">
+					
+					<div class="form-group  col-sm-4">
+						<label class="control-label" for="name">Nome</label>
+						<input type="text" class="form-control" id="name" autofocus="autofocus" th:field="*{name}" />
+					</div>
+					
+					<div class="form-group  col-sm-4">
+						<label class="control-label" for="name">Descrição</label>
+						<input type="text" class="form-control" id="name" autofocus="autofocus" 
+							th:field="*{description}" />
+					</div>
+					
+					<div class="form-group  col-sm-2">
+						<label class="control-label" for="valorAntecipado">Valor</label>
+						<div class="input-group">
+				      		<div class="input-group-addon">R$</div> 
+							<input type="text" maxlength="14" class="form-control  js-decimal" 
+								id="valorAntecipado" th:field="*{value}"/>
+						</div>
+					</div>
+					
+					<div class="form-group  col-sm-2">
+						<label class="control-label">Status</label>
+						<div>
+							<input type="checkbox" class="js-status" data-size="small" data-off-color="danger" 
+								data-on-text="Ativo" data-off-text="Inativo" th:field="*{status}" />
+						</div>
+					</div>
+				
+				</div>
+						
+				<button type="submit" class="btn  btn-primary">Pesquisar</button>
+			</form>
+			 
+			<div class="table-responsive al-table-simples">
+				<table class="table  table-hover">
+					<thead>
+						<tr>
+							<th class="table-name">
+								<alvorecer:order page="${page}" field="name" text="Nome"/>
+							</th>
+							<th class="table-name">Descrição</th>
+							<th class="table-email">
+								<alvorecer:order page="${page}" field="status" text="Status"/>
+							</th>
+							<th class="table-acoes"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="products : ${page.content}">
+							<td th:text="${products.name}">Nome</td>
+							<td th:text="${products.description}">Descrição</td> 
+							<td>
+								<th:block th:if="${products.status}">
+									<span class="label label-success">Ativo</span>
+								</th:block>
+								<th:block th:if="${not products.status}">
+									<span class="label label-danger">Inativo</span>
+								</th:block>
+							</td>
+
+							<td class="text-center">
+								<a class="btn  btn-link  btn-xs js-tooltip" title="Editar" 
+									th:href="@{/products/{id}(id=${products.id})}"> 
+									<i class="glyphicon glyphicon-pencil"></i>
+								</a> 
+							</td>
+						</tr>
+						<tr th:if="${page.empty}">
+							<td class="text-center" colspan="7">Nenhum Registro Encontrado</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					<alvorecer:pagination page="${page}"/>
+				</div>
+			</div> 
+		</div>		
+		
+	</section>
+	<th:block layout:fragment="javascript-extra">
+		<script th:src="@{/javascripts/vendors/bootstrap-switch.min.js}"></script>
+		<script>
+			$('.js-status').bootstrapSwitch();
+		</script>
+	</th:block>
+</body>
+</html>

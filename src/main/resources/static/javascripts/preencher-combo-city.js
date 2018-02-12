@@ -26,14 +26,22 @@ Alvorecer.ComboCity = (function() {
 		this.comboState = comboState;
 		this.city = $('#city');
 		this.imgLoading = $('.js-img-loading-city');
+		this.inputHiddenCitySelected = $('#inputHiddenCitySelected');
 	}
 
 	ComboCity.prototype.iniciar = function() {
 		reset.call(this);
-		this.comboState.on('alterado', onStateAlterado.bind(this));		
+		this.comboState.on('alterado', onStateAlterado.bind(this));	
+		var idState = this.comboState.state.val();
+		initCity.call(this, idState);
 	}
 
 	function onStateAlterado(evento, codeState) {
+		this.inputHiddenCitySelected.val('');
+		initCity.call(this, codeState);
+	}
+	
+	function initCity(codeState) {
 		if(codeState){
 			var resposta = $.ajax({
 				url : this.city.data('url'),
@@ -51,12 +59,18 @@ Alvorecer.ComboCity = (function() {
 	
 	function onGetCityFinal(city) {
 		var options = [];
+		options.push('<option value="">Selecione uma Cidade</option>');
 		city.forEach(function(city) {
 			options.push('<option value ="' + city.id + '">' + city.name + '</option>');
 		});
 		
 		this.city.html(options.join(''));
 		this.city.removeAttr('disabled');
+		
+		var idCitySelected = this.inputHiddenCitySelected.val();
+		if (idCitySelected) {
+			this.city.val(idCitySelected);
+		}
 	}
 	
 	function reset() {

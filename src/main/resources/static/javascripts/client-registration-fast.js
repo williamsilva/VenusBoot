@@ -18,7 +18,7 @@ Alvorecer.ClientRegistrationFast = (function() {
 		this.inputCpfOuCnpjClient = $('#cpfCnpj');
 		this.inputNameClient = $('#name');
 		this.inputEmailClient = $('#email');
-		this.inputCelularClient = $('#celular');
+		this.inputCelularClient = $('#cellPhone');
 		this.inputPhoneNumberClient = $('#phoneNumber');
 		this.inputCodePostalClient = $('#codePostal');
 		this.inputCityClient = $('#city');
@@ -26,6 +26,8 @@ Alvorecer.ClientRegistrationFast = (function() {
 		this.inputNeighborhoodClient = $('#neighborhood');
 		this.inputStreetClient = $('#street');
 		this.inputReferenceClient = $('#reference');
+		
+		this.buscarCliente = new Alvorecer.BuscaClient();
 	}
 
 	ClientRegistrationFast.prototype.iniciar = function() {
@@ -93,6 +95,7 @@ Alvorecer.ClientRegistrationFast = (function() {
 					reference : this.inputReferenceClient.val(),
 					city : {
 						id : this.inputCityClient.val(),
+						name: this.inputCityClient.val(),
 					}
 				}),
 				error : onErroSaveClient.bind(this),
@@ -105,10 +108,19 @@ Alvorecer.ClientRegistrationFast = (function() {
 			this.containerMesageErro.html('<span>' + mensageErro + '</span>');
 		}
 	}
+	
+	function onClientSave(client) {
+		$('.js-cpfOuCnpj').val(client.cpfOuCnpj);
+		this.buscarCliente.enable();
+		this.modal.modal('hide');
+		$('.attendece-js-img-new').hide();
+	}
 
 	function onErroSaveClient(obj) {
 		var mensageErro = obj.responseText;
 		this.containerMesageErro.removeClass('hidden');
+		
+		console.log('Erro ao salvar Cliente ', mensageErro)
 
 		if (obj.responseText === 'CPF/CNPJ é obrigatório') {
 			this.form.find('.client-requerid-cpf-cnpj').addClass('has-error');
@@ -129,17 +141,21 @@ Alvorecer.ClientRegistrationFast = (function() {
 			this.form.find('.client-requerid-cpf-cnpj').addClass('has-error');
 			this.containerMesageErro.html('<span>' + mensageErro + '</span>');
 		}
-	}
-
-	function onClientSave(client) {
-		$('#clientName').val(client.name);
-		$('#clinteEmail').val(client.email);
-		$('#clientPhoneNumber').val(client.phoneNumber);
-		$('#clientTelefone').val(client.celular);
-		$('.js-cpfOuCnpj').val(client.cpfOuCnpj);
-		$('.js-client').val(client.Id);
-		this.modal.modal('hide');
-		$('.attendece-js-img-new').hide();
+		
+		if (obj.responseText === 'Informe uma Cidade') {
+			this.form.find('.client-requerid-city').addClass('has-error');
+			this.containerMesageErro.html('<span>' + mensageErro + '</span>');
+		}
+		
+		if (obj.responseText === 'CPF inválido') {
+			this.form.find('.client-requerid-cpf-cnpj').addClass('has-error');
+			this.containerMesageErro.html('<span>' + mensageErro + '</span>');
+		}
+		
+		if (obj.responseText === 'CNPJ inválido') {
+			this.form.find('.client-requerid-cpf-cnpj').addClass('has-error');
+			this.containerMesageErro.html('<span>' + mensageErro + '</span>');
+		}
 	}
 
 	return ClientRegistrationFast;

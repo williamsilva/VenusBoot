@@ -8,34 +8,72 @@
 	<div class="aw-layout-sidebar__content">
 
     	<nav class="aw-menu  js-menu">
+    		
+    		<div class="user-panel">
+    			<a th:href="@{/users/perfil}" class="pull-left image">
+    				<img th:src="@{/images/alvorecer/thumbnail-user-null.jpg}" class="img-circle" alt="User Image">
+    				<span class="hidden-xs" th:text="${#authentication.principal.use.name}">Alvorecer Soluções</span>
+    			</a>
+			</div>
+    		
       		<ul class="aw-menu__list">
-
+			        		
         		<li class="aw-menu__item" alvorecer:menu="@{/}">
           			<a th:href="@{/}"><i class="fa  fa-fw  fa-home"></i><span>Dashboard</span></a>
         		</li>
-
+				
+				<!-- 
 				<li class="aw-menu__item">
           			<a href="#">
-            			<i class="fa  fa-fw  fa-credit-card"></i><span>Atendimentos</span>
+            			<i class="fa  fa-fw  fa-weixin"></i><span>Atendimentos</span>
             			<i class="aw-menu__navigation-icon  fa"></i>
           			</a>
       
-          			<ul class="aw-menu__list  aw-menu__list--sublist">
-			            <li class="aw-menu__item  aw-menu__item--link" alvorecer:menu="@{/attendances.+}">
-			            	<a th:href="@{/attendances/new}">Registros de Atendimentos</a>
-			            </li>
-			            
+          			<ul class="aw-menu__list  aw-menu__list--sublist">			            
 			            <li class="aw-menu__item  aw-menu__item--link" alvorecer:menu="@{/attendances}">
 			            	<a th:href="@{/attendances}">Atendimentos</a>
 			            </li>
+			             <li class="aw-menu__item  aw-menu__item--link" alvorecer:menu="@{/attendances.+}">
+			            	<a th:href="@{/attendances/new}">Novo Atendimento</a>
+			            </li>
 			        </ul>
-			    </li>
-				
-					
+			    </li>	-->
+			    
+			    <li class="aw-menu__item">
+          			<a href="#">
+            			<i class="fa  fa-fw fa-list"></i><span>Reservas</span>
+            			<i class="aw-menu__navigation-icon  fa"></i>
+          			</a>
+      
+          			<ul class="aw-menu__list  aw-menu__list--sublist">			            
+			            <li class="aw-menu__item  aw-menu__item--link" alvorecer:menu="@{/reservations}">
+			            	<a th:href="@{/reservations}">Reservas</a>
+			            </li>
+			             <li class="aw-menu__item  aw-menu__item--link" alvorecer:menu="@{/reservations.+}">
+			            	<a th:href="@{/reservations/new}">Nova Reserva</a>
+			            </li>
+			        </ul>
+			    </li>	
+			    
+			     <li class="aw-menu__item">
+          			<a href="#">
+            			<i class="fa  fa-fw fa-list"></i><span>Produtos</span>
+            			<i class="aw-menu__navigation-icon  fa"></i>
+          			</a>
+      
+          			<ul class="aw-menu__list  aw-menu__list--sublist">			            
+			            <li class="aw-menu__item  aw-menu__item--link" alvorecer:menu="@{/products}">
+			            	<a th:href="@{/products}">Produtos</a>
+			            </li>
+			             <li class="aw-menu__item  aw-menu__item--link" alvorecer:menu="@{/products.+}">
+			            	<a th:href="@{/products/new}">Novo</a>
+			            </li>
+			        </ul>
+			    </li>		
 				
         		<li class="aw-menu__item">
           			<a href="#">
-            			<i class="fa  fa-fw  fa-truck"></i><span>Clientes</span>
+            			<i class="fa  fa-fw  fa-male"></i><span>Clientes</span>
             			<i class="aw-menu__navigation-icon  fa"></i>
           			</a>
       
@@ -51,16 +89,29 @@
 
         		<li class="aw-menu__item">
           			<a href="#">
-            			<i class="fa  fa-fw  fa-database"></i><span>Usuários</span>
+            			<i class="fa  fa-fw  fa-users"></i><span>Usuários</span>
             			<i class="aw-menu__navigation-icon  fa"></i>
           			</a>
 
           			<ul class="aw-menu__list  aw-menu__list--sublist">
 			            <li class="aw-menu__item  aw-menu__item--link" alvorecer:menu="@{/users}">
-			            	<a th:href="@{/users}">Pesquisa</a>
+			            	<a th:href="@{/users}">Usuários</a>
 			            </li>
 			            <li class="aw-menu__item  aw-menu__item--link" alvorecer:menu="@{/users.+}">
-			            	<a th:href="@{/users/new}">Novo</a>
+			            	<a th:href="@{/users/new}">Novo Usuário</a>
+			            </li>
+          			</ul>
+        		</li>
+        		
+        		<li class="aw-menu__item">
+          			<a href="#">
+            			<i class="fa  fa-fw  fa-file-pdf-o"></i><span>Relatórios</span>
+            			<i class="aw-menu__navigation-icon  fa"></i>
+          			</a>
+
+          			<ul class="aw-menu__list  aw-menu__list--sublist">
+			            <li class="aw-menu__item  aw-menu__item--link" alvorecer:menu="@{/report.*}">
+			            	<a th:href="@{/report/vouchersEmitidos}">Voucers Emitidos</a>
 			            </li>
           			</ul>
         		</li>

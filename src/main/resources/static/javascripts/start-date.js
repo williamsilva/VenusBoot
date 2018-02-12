@@ -59,7 +59,7 @@ Alvorecer.MaskDateFinal = (function() {
 Alvorecer.MaskHora = (function() {
 
 	function MaskHora() {
-		this.inputHora = $('#hourRegister');
+		this.inputHora = $('.js-hora');
 	}
 
 	MaskHora.prototype.enable = function name() {

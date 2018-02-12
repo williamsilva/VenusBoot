@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.alvorecer.venus.model.Client;
 import com.alvorecer.venus.repository.Clients;
 import com.alvorecer.venus.service.excepition.ClientJaCadastradoExcepition;
+import com.alvorecer.venus.service.excepition.RegistroObrigatorioException;
+import com.google.common.base.Strings;
 
 @Service
 public class CadasterClientService {
@@ -18,20 +20,17 @@ public class CadasterClientService {
 
 	@Transactional
 	public Client save(Client client) {
-		Optional<Client> clientOptional = clients.findBycpfOuCnpj(client.getCpfOuCnpj());
-		if (clientOptional.isPresent()) {
+		Optional<Client> clientOptional = clients.findByCpfOuCnpj(client.getCpfOuCnpj());
+		
+		if(Strings.isNullOrEmpty(client.getCity().getName())){
+			throw new RegistroObrigatorioException("Informe uma Cidade");
+		}
+		
+		if (clientOptional.isPresent() && !clientOptional.get().equals(client)) {
 			throw new ClientJaCadastradoExcepition("Cliente já cadastrado");
 		}
 
 		return clients.saveAndFlush(client);
 	}
 
-	public Client getClient(Client client) {
-		Optional<Client> clientOptional = clients.findBycpfOuCnpj(client.getCpfOuCnpj());
-
-		if (clientOptional.isPresent()) {
-			return clientOptional.get();
-		}
-		return client;
-	}
 }

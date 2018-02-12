@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:alvorecer="http://alvorecer.com"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
+	layout:decorator="~{layout/LayoutPadrao}">
+
+<head>
+	<title>Reservas</title>
+</head>
+
+<body>
+	<section layout:fragment="conteudo">
+
+		<div class="page-header">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-10">
+						<h1>Reservas</h1>
+					</div>
+					<div class="col-xs-2">
+						<div class="aw-page-header-controls">
+							<a class="btn btn-default" th:href="@{/reservations/new}"> 
+								<i class="glyphicon glyphicon-plus-sign"></i> 
+								<samp class="hidden-xs hidden-sm ">Nova Reserva</samp>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<form method="GET" th:object = "${reserveFilter}">
+				
+				<div class="row">
+					<div class="form-group  col-sm-3">
+						<label class="control-label" for="voucher">Voucher</label>
+						<input type="text" class="form-control" id="voucher" autofocus="autofocus" th:field="*{voucher}"/>
+					</div>
+					
+					<div class="form-group  col-sm-3">
+						<label for="status" class="control-label">Status</label>
+						<select id="status" class="form-control" th:field="*{status}">
+	                    	<option value="">Todos os status</option>
+	                    	<option th:each="status : ${statusVouchers}" th:value="${status}" 
+	                    		th:text="${status.descricao}"></option>
+	                	</select>
+					</div>
+					
+					<div class="form-group col-sm-2">
+						<label for="typeClient" class="control-label">Tipo pessoa</label> 
+						<div>
+							<th:block th:each="typeClient : ${type}">
+								<div class="radio  radio-inline">
+									<input type="radio" th:id="|id_${typeClient}|" class="js-radio-tipo-pessoa"
+										name="typeClient" data:documento="${typeClient.documento}" 
+										data:mascara="${typeClient.mascara}" th:field = "*{typeClient}"
+										th:value="${typeClient}"> 
+									<label class="control-label" th:for="|id_${typeClient}|" 
+									th:text="${typeClient.descricao}">Física</label>
+								</div>
+							</th:block>
+						</div>
+					</div>
+					
+					<div class="col-sm-3 form-group">
+						<label for="cpfOuCnpj" class="control-label">CPF-CNPJ</label>						
+						<div class="alvorecer-field-action">
+							<input id="cpfOuCnpj" type="text" class="form-control" 
+								th:field = "*{cpfOuCnpj}" disabled/>
+						</div>
+					</div>
+					
+				</div>
+				
+				<div class="row">
+				<div class="form-group  col-sm-6">
+					<label for="dataCriacaoInicial">Data de criação</label>
+					<div class="form-inline">
+						<input type="text" class="form-control  aw-form-control-inline-sm  js-date" id="dataCriacaoInicial" 
+							th:field="*{desde}" autocomplete="off"/>
+						<label for="dataCriacaoFinal" class="aw-form-label-between">até</label>
+						<input type="text" class="form-control  aw-form-control-inline-sm  js-date" id="dataCriacaoInicial" 
+							th:field="*{ate}" autocomplete="off"/>
+					</div>
+				</div>
+				
+				<div class="form-group  col-sm-6">
+					<label for="valorMinimo">Valor total</label>
+					<div class="form-inline">
+						<input type="text" class="form-control  aw-form-control-inline-sm  js-decimal" id="valorMinimo" th:field="*{valorMinimo}"/>
+						<label for="valorMaximo" class="aw-form-label-between">até</label>
+						<input type="text" class="form-control  aw-form-control-inline-sm  js-decimal" id="valorMaximo" th:field="*{valorMaximo}"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="form-group  col-sm-6">
+					<label class="control-label" for="nomeCliente">Nome cliente</label>
+					<input type="text" class="form-control" id="nomeCliente" th:field="*{nomeCliente}"/>
+				</div>
+				
+			</div>
+			
+			<button type="submit" class="btn  btn-primary">Pesquisar</button>
+				
+			</form>
+			
+			<div class="table-responsive al-table-simples">
+				<table class="table  table-hover">
+					<thead>
+						<tr>
+							<th>Voucher</th>
+							<th class="table-name">
+								<alvorecer:order page="${page}" field="c.name" text="Nome"/>
+							</th>														
+							<th>Data Cadastro</th>
+							<th>Valor Total</th>
+							<th>Usuário Cadastro</th>
+							<th>Status</th>
+							<th class="table-acoes"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="reserve : ${page.content}">
+							<td th:text="${reserve.voucher}">Voucher</td>
+							<td th:text="${reserve.client.name}">Nome</td>
+							<td th:text="${{reserve.creationDate}}">Data Cadastro</td>
+							<td th:text="|R$ ${{reserve.valor}}|">Valor Total</td>
+							<td th:text="${reserve.use.name}">Usuario</td>
+							<td th:text="${reserve.statusVouchers.descricao}"></td>
+							<td class="text-center">
+								<a class="btn  btn-link  btn-xs js-tooltip" title="Editar" 
+									th:href="@{/reservations/{id}(id=${reserve.id})}"> 
+									<i class="glyphicon glyphicon-pencil"></i>
+								</a> 
+							</td>
+						</tr>
+						<tr th:if="${page.empty}">
+							<td class="text-center" colspan="7">Nenhum Registro Encontrado</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					<alvorecer:pagination page="${page}"/>
+				</div>
+			</div>
+			
+		</div>
+	</section>
+
+</html>

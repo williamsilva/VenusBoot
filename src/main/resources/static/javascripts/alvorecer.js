@@ -75,6 +75,34 @@ Alvorecer.MaskCodePostal = (function() {
 
 }());
 
+
+
+Alvorecer.MaskMoney = (function() {
+	
+	function MaskMoney() {
+		this.decimal = $('.js-decimal');
+		this.plain = $('.js-plain');
+	}
+	
+	MaskMoney.prototype.enable = function() {
+		this.decimal.maskMoney({ decimal: ',', thousands: '.' });
+		this.plain.maskMoney({ precision: 0, thousands: '.' });
+	}
+	
+	return MaskMoney;
+	
+}());
+
+numeral.language('pt-br');
+
+Alvorecer.formatarMoeda = function(valor) {
+	return numeral(valor).format('0,0.00');
+}
+
+Alvorecer.recuperarValor = function(valorFormatado) {
+	return numeral().unformat(valorFormatado);
+}
+
 $(function() {
 	var maskDate = new Alvorecer.MaskDate();
 	maskDate.enable();
@@ -87,5 +115,8 @@ $(function() {
 	
 	var security = new Alvorecer.Security();
 	security.enable();
+	
+	var maskMoney = new Alvorecer.MaskMoney();
+	maskMoney.enable();
 
 });

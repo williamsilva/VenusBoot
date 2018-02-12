@@ -17,7 +17,8 @@ public class CadasterAttendenceService {
 
 	@Transactional
 	public void cadaster(Attendance attendance) {
-		if (StringUtils.isEmpty(attendance.getClient())) {
+
+		if (StringUtils.isEmpty(attendance.getClient().getName())) {
 			throw new RegistroObrigatorioExcepition("Informe um Cliente");
 		}
 		attendances.save(attendance);

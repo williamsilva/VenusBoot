@@ -9,6 +9,7 @@ public class DashboardController {
 
 	@GetMapping("/")
 	public ModelAndView dashboard() {
+
 		ModelAndView andView = new ModelAndView("Dashboard");
 
 		return andView;

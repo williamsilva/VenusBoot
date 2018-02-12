@@ -17,14 +17,17 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.alvorecer.venus.validation.AtributoConfirmacao;
 
-@AtributoConfirmacao(atributo = "password", atributoConfirmacao = "confirmacaoSenha", message = "As senha não conferem")
+@AtributoConfirmacao(atributo = "password", 
+	atributoConfirmacao = "confirmacaoSenha", message = "As senhas não conferem")
 @Entity
 @Table(name = "user")
+@DynamicUpdate
 public class Use implements Serializable {
 
 	private static final long serialVersionUID = 1L;

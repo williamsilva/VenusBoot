@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	xmlns:alvorecer="http://alvorecer.com"
+	xmlns:data="http://www.thymeleaf.org/extras/data"
+	layout:decorator="~{layout/LayoutPadrao}">
+
+<head>
+	<title>Lista de Usuários</title>
+</head>
+
+<section layout:fragment="conteudo">
+
+	<div class="page-header">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-10">
+					<h1>Pesquisa de usuários</h1>
+				</div>
+				
+				<div class="col-xs-2">
+					<div class="aw-page-header-controls">
+						<a class="btn  btn-default" th:href="@{/users/new}">
+							<i class="glyphicon  glyphicon-plus-sign"></i> 
+							<span class="hidden-xs  hidden-sm">Novo usuário</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="container-fluid">
+		<form method="GET" th:object="${userFilter}" th:action="@{/users}">
+			<div class="row">
+				<div class="form-group  col-sm-6">
+					<label class="control-label" for="name">Nome</label>
+					<input type="text" class="form-control" id="name" autofocus="autofocus" th:field="*{name}"/>
+				</div>
+				
+				<div class="form-group  col-sm-6">
+					<label class="control-label" for="email">E-mail</label>
+					<input type="text" class="form-control" id="email" th:field="*{email}"/>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="form-group  col-sm-6">
+					<label class="control-label">Grupos</label> 
+					<div>
+						<th:block th:each="group : ${grupos}">
+							<div class="checkbox  checkbox-inline">
+								<input type="checkbox" th:value="${group.id}" th:field ="*{groups}"/>
+								<label th:for = "${#ids.prev('groups')}" th:text="${group.name}">Administrador</label>
+							</div>
+						</th:block>
+					</div>
+				</div>
+			</div>
+			
+			<button type="submit" class="btn  btn-primary">Pesquisar</button>
+		</form>
+		
+		<div class="aw-datatable-toolbar">
+				<button class="btn btn-success  btn-xs  js-status-btn disabled" 
+					data:status="ATIVAR" data:url="@{/users/status}">
+					<span>Ativar</span>
+				</button>				
+				<button class="btn btn-danger  btn-xs  js-status-btn disabled" 
+					data:status="DESATIVAR" data:url="@{/users/status}">
+					<span>Desativar</span>
+				</button>
+		</div>
+		
+		<div class="table-responsive al-table-simples">
+				<table class="table  table-hover">
+					<thead>
+						<tr>
+							<th class="table-checkbox-status">
+								<div class="checkbox aw-checkbox-no-margin">
+									<input type="checkbox" class="js-selecao-todos"/>
+									<label></label>
+								</div>
+							</th>
+							<th class="table-name">
+								<alvorecer:order page="${page}" field="name" text="Nome"/>
+							</th>
+							<th class="table-email">
+								<alvorecer:order page="${page}" field="email" text="E-mail"/>
+							</th>							
+							<th class="table-grupo">Grupo</th>
+							<th class="table-checkbox-status">Status</th>
+							<th class="table-acoes"></th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr th:each ="users : ${page.content}">
+							<td>
+								<div class="checkbox aw-checkbox-no-margin" 
+									th:if ="${#authentication.principal.use.id != users.id}">
+									<input type="checkbox" class="js-selecao" data:codigo = "${users.id}"/>
+									<label></label>
+								</div>
+							</td>
+							<td th:text="${users.name}">Nome</td>
+							<td th:text="${users.email}">Nome</td>
+							<td>
+								<span th:each= "group : ${users.groups}" th:text = "|${group.name} 
+									${groupStat.last ? '' : ','} |">Grupos</span>
+							</td>
+							<td>
+								<th:block th:if="${users.active}">
+									<span class="label label-success">Ativo</span>
+								</th:block>
+								<th:block th:if="${not users.active}">
+									<span class="label label-danger">Inativo</span>
+								</th:block>
+							</td>
+							<td class="text-center">
+								<a class="btn  btn-link  btn-xs js-tooltip" title="Editar" 
+									th:href="@{/users/{id}(id=${users.id})}"> 
+									<i class="glyphicon glyphicon-pencil"></i>
+								</a> 
+								<a class="btn  btn-link  btn-xs js-tooltip" title="Excluir"> 
+									<i class="glyphicon glyphicon-remove"></i>
+								</a>
+							</td>
+						</tr>
+						<tr th:if="${page.empty}">
+							<td class="text-center" colspan="7">Nenhum Registro Encontrado</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					<alvorecer:pagination page="${page}"/>
+				</div>
+		</div>
+		
+	</div>
+</section>
+
+<th:block layout:fragment="javascript-extra">
+	
+</th:block>
+</html>

@@ -2,11 +2,11 @@
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:th="http://www.thymeleaf.org">
 	
-<th:block th:fragment="order (pagina, propriedade, texto)">
-	<a th:href="${pagina.urlOrdenada(propriedade)}" th:remove="${pagina.vazia} ? tag">
-		<span th:text="${texto}"></span>
-		<span class="dropup" th:remove="${pagina.descendente(propriedade)} ? tag"
-				th:if="${pagina.ordenada(propriedade)}">
+<th:block th:fragment="order (page, property, text)">
+	<a th:href="${page.urlOrdenada(property)}" th:remove="${page.empty} ? tag">
+		<span th:text="${text}"></span>
+		<span class="dropup" th:remove="${page.descendente(property)} ? tag"
+				th:if="${page.ordenada(property)}">
 			<span class="caret"></span>
 		</span>
 	</a>
